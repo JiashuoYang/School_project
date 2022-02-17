@@ -1,86 +1,109 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
 body {
- padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
-
-.popover {
- width: 600px;
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    color: #fff;
+    text-align: center;
+    height: 100px;
+    line-height: 100px;
+    background-color: #333;
 }
-
-.table td {
- padding-top: 3px;
- padding-bottom: 3px;
+header a {
+    color: #fff;
+    text-decoration: none;
 }
-
-.table-condensed td {
- padding-top: 0;
- padding-bottom: 0;
+.search-bar-container {
+    top: 0;
+    position: sticky;
+    margin-top: 100px;
+    padding: 5px;
+    background-color: #fff;
 }
-
-.table .progress {
- margin-bottom: inherit;
+.search-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    height: 60px;
+    margin: auto;
+    position: relative;
+    border-radius: 2px;
+    background-color: red;
 }
-
-.table-borderless th, .table-borderless td {
- border: 0 !important;
+.search-bar .search {
+    position: relative;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 2px 0 0 2px;
+    box-shadow: inset 0 1px 2px #ddd;
+    font-size: 20px;
+    padding: 2px 6px;
+    flex: 1;
+    display: flex;
+    transition: border-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
 }
-
-.table tbody td.success, li.success, span.success {
- background-color: #dff0d8;
+.search-bar .search:focus {
+    outline: 0;
+    border-color: #065fd4;
 }
-
-.table tbody tr.danger, .table tbody td.danger, li.danger, span.danger {
- background-color: #f2dede;
+.search-bar .search-button {
+    border: 1px solid #ddd;
+    border-radius: 0 2px 2px 0;
+    border-left: none;
+    cursor: pointer;
+    height: 60px;
+    width: 64px;
+    margin: 0;
+    transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
 }
-
-.table tbody td.warning, li.warning, span.warning {
- background-color: #fcf8e3;
+.search-bar .search-button:hover,
+.search-bar .search-button:focus {
+    background-color: #d3d3d3;
 }
-
-.table tbody td.info {
- background-color: #d9edf7;
+.card-container {
+    margin: 100px auto;
+    display: flex;
+    flex-wrap: wrap;
 }
-
-td.big {
- width: 100px;
+.card {
+    flex: auto;
+    margin: 10px;
+    width: 20%;
+    background-color: #ddd;
 }
-
-td.small {
+.card-image {
+    width: 100%;
+    height: auto;
 }
-
-td.codeLine {
- font-family: monospace;
- white-space: pre;
+@media (max-width: 1000px) {
+    .card {
+        width: 30%;
+    }
 }
-
-td span.comment {
- color: #888a85;
+@media (max-width: 800px) {
+    header {
+        font-size: 24px;
+    }
+    .card {
+        width: 45%;
+    }
 }
-
-td span.default {
- color: #2e3436;
-}
-
-td span.html {
- color: #888a85;
-}
-
-td span.keyword {
- color: #2e3436;
- font-weight: bold;
-}
-
-pre span.string {
- color: #2e3436;
-}
-
-span.success, span.warning, span.danger {
- margin-right: 2px;
- padding-left: 10px;
- padding-right: 10px;
- text-align: center;
-}
-
-#classCoverageDistribution, #classComplexity {
- height: 200px;
- width: 475px;
+@media (max-width: 500px) {
+    header {
+        font-size: 20px;
+    }
+    .card {
+        width: 90%;
+    }
 }
