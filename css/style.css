@@ -26,8 +26,9 @@ header a {
 .search-bar-container {
     top: 0;
     position: sticky;
-    margin-top: 100px;
+    margin: 100px auto;
     padding: 5px;
+    border-bottom: 1px solid #ddd;
     background-color: #fff;
 }
 .search-bar {
@@ -39,7 +40,6 @@ header a {
     margin: auto;
     position: relative;
     border-radius: 2px;
-    background-color: red;
 }
 .search-bar .search {
     position: relative;
@@ -69,10 +69,10 @@ header a {
 }
 .search-bar .search-button:hover,
 .search-bar .search-button:focus {
-    background-color: #d3d3d3;
+    background-color: rgb(230 230 230);
 }
 .card-container {
-    margin: 100px auto;
+    margin: auto;
     display: flex;
     flex-wrap: wrap;
 }
@@ -80,11 +80,17 @@ header a {
     flex: auto;
     margin: 10px;
     width: 20%;
+    cursor: pointer;
     background-color: #ddd;
 }
 .card-image {
     width: 100%;
     height: auto;
+}
+.product {
+    width: 90%;
+    margin: 10px;
+    background-color: #ddd;
 }
 @media (max-width: 1000px) {
     .card {
