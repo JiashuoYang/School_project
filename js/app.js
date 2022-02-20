@@ -1,7 +1,8 @@
 const app = angular.module("myApp", []);
-app.controller("homeCtrl", ($scope, $http) => {
+app.controller("myCtrl", ($scope, $window, $http) => {
     $scope.hostname = "http://localhost/web/School_project/pages/index.html";
     $scope.api = "http://cs102.nihs.tp.edu.tw:5000";
+    $scope.Restaurants = [];
     $scope.restaurants = [];
     $scope.current_restaurant = {
         logo: "",
@@ -19,6 +20,7 @@ app.controller("homeCtrl", ($scope, $http) => {
     $http
         .get(`${$scope.api}/search?key`)
         .then((res) => {
+            $scope.Restaurants = res.data;
             $scope.restaurants = res.data;
         })
         .catch((err) => {
@@ -57,6 +59,21 @@ app.controller("homeCtrl", ($scope, $http) => {
                 console.error(err);
             });
     };
+    $scope.labels = () => {
+        let labels = [];
+        return labels
+            .concat(
+                ...$scope.Restaurants.map((restaurant) =>
+                    restaurant.cuisines.map((cuisine) => cuisine.name)
+                )
+            )
+            .filter((val, idx, arr) => arr.indexOf(val) === idx);
+    };
+    $scope.filterRestaurants = (label) => {
+        $scope.restaurants = $scope.Restaurants.filter((restaurant) =>
+            restaurant.cuisines.map((cuisine) => cuisine.name).includes(label)
+        );
+    };
     $scope.chooseRestaurant = (restaurant) => {
         $http
             .get(`${$scope.api}/restaurant?code=${restaurant.code}`)
@@ -87,6 +104,7 @@ app.controller("homeCtrl", ($scope, $http) => {
     $scope.SearchFilter = (e) => {
         $scope.meal = e.meal;
         if ($scope.meal.length > 0) {
+            window.scrollTo({ top: 410, behavior: "smooth" });
             $scope.sortedMeals = $scope.categories.filter((categorie) =>
                 categorie.products
                     .map((product) => product.name)
@@ -94,7 +112,7 @@ app.controller("homeCtrl", ($scope, $http) => {
             );
             console.log($scope.meal);
         } else {
-            console.log("none of the above.");
+            console.log("nothing");
         }
     };
     $scope.chooseProduct = (product) => {
@@ -113,5 +131,15 @@ app.controller("homeCtrl", ($scope, $http) => {
         //     .then((res) => {
         //         console.log(res.data.answer);
         //     });
+    };
+    window.onscroll = () => {
+        if (document.documentElement.scrollTop > 100) {
+            document.querySelector(".scrollTop").style.display = "flex";
+        } else {
+            document.querySelector(".scrollTop").style.display = "none";
+        }
+    };
+    $scope.scrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 });

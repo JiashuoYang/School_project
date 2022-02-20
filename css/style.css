@@ -7,7 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #efebe9;
+    background-color: #fff;
 }
 header {
     display: flex;
@@ -29,7 +29,7 @@ header a {
     top: 0;
     z-index: 1000;
     position: sticky;
-    margin: 100px auto;
+    margin: 100px 0px auto;
     padding: 5px;
     border-bottom: 1px solid #ddd;
     background-color: #fff;
@@ -82,7 +82,34 @@ header a {
 .search-bar .search-button:focus {
     background-color: rgb(230, 230, 230);
 }
-.order {
+.container {
+    padding: 10px;
+    background-color: #efebe9;
+}
+.filter > label {
+    font-size: 30px;
+}
+.filter > div {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+.filter-btn {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 20px;
+    color: #000;
+    cursor: pointer;
+    width: 100px;
+    height: 80px;
+    margin: 5px;
+    padding: 10px;
+    background-color: #fff;
+}
+.order > label {
+    font-size: 30px;
+}
+.order > div {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -258,6 +285,20 @@ footer p {
     color: #fff;
     text-align: center;
 }
+.scrollTop {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 20px;
+    bottom: 20px;
+    width: 60px;
+    height: 60px;
+    z-index: 1000;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #065fd4;
+}
 @media (max-width: 1000px) {
     .card {
         width: 30%;
@@ -280,9 +321,5 @@ footer p {
     }
     .card {
         width: 90%;
-    }
-    .order-btn {
-        font-size: 12px;
-        padding: 10px 20px;
     }
 }
