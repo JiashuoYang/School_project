@@ -6,12 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>想吃、點什麼嗎？</title>
         <link rel="stylesheet" href="../css/style.css" />
-        <script src="../js/fontawesome.js"></script>
+        <link rel="stylesheet" href="../fonts/css/all.min.css" />
         <script src="../js/jquery.min.js"></script>
         <script src="../js/ng.js"></script>
         <script src="../js/app.js"></script>
     </head>
-    <body ng-app="myApp" ng-controller="myCtrl">
+    <body ng-app="myApp" ng-controller="homeCtrl">
         <header>
             <a href="http://localhost/web/School_project/pages/index.html"
                 >想吃、點什麼嗎？</a
@@ -19,18 +19,42 @@
         </header>
         <main>
             <div class="search-bar-container">
-                <div class="search-bar">
+                <div ng-if="!canOrder" class="search-bar">
                     <input
                         class="search"
                         type="text"
-                        name="product"
-                        ng-model="product"
+                        name="meal"
+                        ng-model="meal"
                         placeholder="今天想吃什麼？"
                     />
                     <button class="search-button" ng-click="handleSearch()">
-                        搜尋
+                        <i class="fa-solid fa-magnifying-glass fa-1x"></i>
                     </button>
                 </div>
+                <div ng-if="canOrder" class="search-bar">
+                    <input
+                        class="search"
+                        type="text"
+                        name="meal"
+                        ng-model="meal"
+                        ng-change="SearchFilter(this)"
+                        placeholder="店內搜尋"
+                    />
+                </div>
+            </div>
+            <div ng-if="!canOrder" class="order">
+                <button class="order-btn" ng-click="handleOrder('default')">
+                    預設
+                </button>
+                <button class="order-btn" ng-click="handleOrder('fee')">
+                    外送服務費
+                </button>
+                <button class="order-btn" ng-click="handleOrder('rating')">
+                    評分最高
+                </button>
+                <button class="order-btn" ng-click="handleOrder('time')">
+                    最快送達
+                </button>
             </div>
             <div class="card-container">
                 <div
@@ -39,53 +63,117 @@
                     key="restaurant.id"
                     ng-click="chooseRestaurant(restaurant)"
                 >
-                    <img
-                        class="card-image"
-                        ng-src="{{ restaurant.hero_image }}"
-                    />
-                    <div>{{ restaurant.name }}</div>
-                    <div>{{ restaurant.address }}</div>
-                    <div>{{ restaurant.rating }}</div>
-                    <div>{{ restaurant.minimum_delivery_time }}</div>
-                    <div>外送服務費＄{{ restaurant.minimum_delivery_fee }}</div>
+                    <div class="card-content">
+                        <div class="card-img">
+                            <img ng-src="{{ restaurant.hero_image }}" />
+                            <div>
+                                <div>{{ restaurant.minimum_delivery_fee }}</div>
+                                <div>分鐘</div>
+                            </div>
+                        </div>
+                        <div class="card-header">
+                            <div class="card-name">{{ restaurant.name }}</div>
+                            <div class="card-rating">
+                                <span class="rating"
+                                    ><i
+                                        style="color: #ff9800"
+                                        class="fa-solid fa-star"
+                                    ></i
+                                    >{{ restaurant.rating }}</span
+                                >/5
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-cuisines">
+                                <span>{{ restaurant.cuisines[0].name }}</span>
+                                <span> {{ restaurant.cuisines[1].name }}</span>
+                            </div>
+                            <div class="card-address">
+                                {{ restaurant.address }}
+                            </div>
+                            <div>
+                                <span class="card-fee"
+                                    >$ {{ restaurant.minimum_delivery_fee }} </span
+                                >外送服務費
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--  -->
-            <div>
-                <div style="height: 200px; overflow: hidden;">
-                    <img
-                        style="width: 100%; height: auto"
-                        ng-src="{{ restaurant_logo }}"
-                    />
+            <div ng-if="canOrder">
+                <div class="restaurant-logo">
+                    <img ng-src="{{ current_restaurant.logo }}" />
                 </div>
-                <div>{{ restaurant_name }}</div>
-                <div ng-repeat="categorie in categories" key="categorie.id">
-                    <div>{{ categorie.name }}</div>
-                    <div
-                        class="product"
-                        ng-repeat="product in categorie.products"
-                        key="product.id"
-                    >
+                <div class="restaurant-description">
+                    <div class="card-name">{{ current_restaurant.name }}</div>
+                    <div class="card-rating">
+                        <span
+                            ><i
+                                style="color: #ff9800"
+                                class="fa-solid fa-star"
+                            ></i
+                            ><strong
+                                >{{ current_restaurant.rating }}/5</strong
+                            ></span
+                        >
+                    </div>
+                    <div class="card-cuisines">
+                        <span>$$$</span>
+                        <span> {{ current_restaurant.cuisines[0].name }}</span>
+                        <span> {{ current_restaurant.cuisines[1].name }}</span>
+                    </div>
+                </div>
+                <div class="restaurant-content">
+                    <div ng-if="meal.length > 0">
+                        <div class="card-name">搜尋 '{{ meal }}'</div>
                         <div
-                            style="
-                                display: flex;
-                                border: 1px solid #ddd;
-                                border-radius: 5px;
-                                padding: 10px;
-                            "
+                            ng-repeat="categorie in sortedMeals"
+                            key="categorie.id"
                         >
                             <div
-                                style="flex: none; width: 150px; height: 120px"
+                                class="product"
+                                ng-repeat="product in categorie.products"
+                                key="product.id"
+                                ng-click="chooseProduct(product)"
                             >
-                                <img
-                                    style="width: 100%; height: 100%"
-                                    ng-src="{{ product.logo_path }}"
-                                />
+                                <div class="product-img">
+                                    <img ng-src="{{ product.logo_path }}" />
+                                </div>
+                                <div class="product-content">
+                                    <div>{{ product.name }}</div>
+                                    <div>
+                                        $ {{ product.product_variations[0].price
+                                        }}
+                                    </div>
+                                </div>
                             </div>
-                            <div>
+                        </div>
+                    </div>
+                    <!--  -->
+                    <div ng-repeat="categorie in categories" key="categorie.id">
+                        <div class="restaurant-cuisines">
+                            {{ categorie.name }}
+                        </div>
+                        <div
+                            class="product"
+                            ng-repeat="product in categorie.products"
+                            key="product.id"
+                            ng-click="chooseProduct(product)"
+                        >
+                            <div class="product-img">
+                                <img ng-src="{{ product.logo_path }}" />
+                                <div
+                                    class="product-selected"
+                                    ng-if="product.selected"
+                                >
+                                    x{{ product.count }}
+                                </div>
+                            </div>
+                            <div class="product-content">
                                 <div>{{ product.name }}</div>
                                 <div>
-                                    {{ product.product_variations[0].price }}
+                                    $ {{ product.product_variations[0].price }}
                                 </div>
                             </div>
                         </div>
@@ -93,5 +181,8 @@
                 </div>
             </div>
         </main>
+        <footer>
+            <p>Copyright &copy; 2022 資訊二仁專題四組</p>
+        </footer>
     </body>
 </html>

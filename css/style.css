@@ -7,24 +7,27 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background-color: #efebe9;
 }
 header {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 2em;
-    color: #fff;
     text-align: center;
     height: 100px;
     line-height: 100px;
-    background-color: #333;
+    background-color: #ff9800;
 }
 header a {
+    text-shadow: 3px 3px 3px #000;
+    font-style: italic;
     color: #fff;
     text-decoration: none;
 }
 .search-bar-container {
     top: 0;
+    z-index: 1000;
     position: sticky;
     margin: 100px auto;
     padding: 5px;
@@ -51,6 +54,10 @@ header a {
     padding: 2px 6px;
     flex: 1;
     display: flex;
+    -webkit-transition: border-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: border-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: border-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -ms-transition: border-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
     transition: border-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
 }
 .search-bar .search:focus {
@@ -65,11 +72,35 @@ header a {
     height: 60px;
     width: 64px;
     margin: 0;
+    -webkit-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -ms-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
     transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
 }
 .search-bar .search-button:hover,
 .search-bar .search-button:focus {
-    background-color: rgb(230 230 230);
+    background-color: rgb(230, 230, 230);
+}
+.order {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.order-btn {
+    border: 0;
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    border-bottom: 1px solid #000;
+    font-size: 20px;
+    color: #000;
+    cursor: pointer;
+    padding: 10px 24px;
+    background-color: #ffc947;
+}
+.order-btn:last-child {
+    border-right: 1px solid #000;
 }
 .card-container {
     margin: auto;
@@ -77,20 +108,155 @@ header a {
     flex-wrap: wrap;
 }
 .card {
+    z-index: 99;
     flex: auto;
     margin: 10px;
     width: 20%;
     cursor: pointer;
-    background-color: #ddd;
 }
-.card-image {
+.card:hover .card-img img {
+    transform: scale(1.1, 1.1);
+}
+.card-img {
+    position: relative;
+    overflow: hidden;
+}
+.card-img img {
+    display: block;
+    width: 100%;
+    height: auto;
+    -webkit-transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+    -ms-transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+    transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+}
+.card-img > div {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 50px;
+    padding: 5px;
+    color: black;
+    text-align: center;
+    background-color: white;
+}
+.card-content {
+    color: #808080;
+    padding: 5px;
+}
+.card-header {
+    display: flex;
+    align-items: center;
+}
+.card-name {
+    flex: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    display: block;
+    color: #000 !important;
+    overflow-x: hidden;
+    font-size: 20px;
+    font-weight: bold;
+}
+.card-rating {
+    flex: none;
+}
+.rating {
+    color: #000 !important;
+    font-weight: bold;
+}
+.card-address {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    overflow-x: hidden;
+}
+.card-fee {
+    color: #000 !important;
+    font-weight: bold;
+}
+.restaurant-logo {
+    height: 200px;
+    overflow: hidden;
+}
+.restaurant-logo img {
     width: 100%;
     height: auto;
 }
+.restaurant-description {
+    padding: 10px;
+}
+.restaurant-content {
+    padding: 10px;
+    background-color: #fff;
+}
+.restaurant-cuisines {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+}
 .product {
-    width: 90%;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
     margin: 10px;
-    background-color: #ddd;
+    padding: 10px;
+    -webkit-transition: box-shadow 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: box-shadow 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: box-shadow 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+    -ms-transition: box-shadow 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+    transition: box-shadow 0.3s cubic-bezier(0.42, 0, 0.58, 1);
+}
+.product:hover {
+    border-color: #fff;
+    box-shadow: 0px 0px 5px;
+}
+.product-selected {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    color: #000;
+    background-color: #f44336;
+}
+.product-img {
+    border-radius: 3px;
+    position: relative;
+    flex: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    width: 150px;
+}
+.product-img img {
+    width: 100%;
+    height: auto;
+}
+.product-content {
+    flex: auto;
+    padding: 5px;
+}
+footer {
+    height: 100px;
+    line-height: 100px;
+    background-color: #333;
+}
+footer p {
+    color: #fff;
+    text-align: center;
 }
 @media (max-width: 1000px) {
     .card {
@@ -104,6 +270,9 @@ header a {
     .card {
         width: 45%;
     }
+    .order-btn {
+        font-size: 16px;
+    }
 }
 @media (max-width: 500px) {
     header {
@@ -111,5 +280,9 @@ header a {
     }
     .card {
         width: 90%;
+    }
+    .order-btn {
+        font-size: 12px;
+        padding: 10px 20px;
     }
 }
