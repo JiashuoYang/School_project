@@ -18,8 +18,8 @@
             >
         </header>
         <main>
-            <div class="search-bar-container">
-                <div ng-if="!canOrder" class="search-bar">
+            <div ng-if="canOrder || !canCompare" class="search-bar-container">
+                <div ng-if="!canOrder && !canCompare" class="search-bar">
                     <input
                         class="search"
                         type="text"
@@ -31,7 +31,7 @@
                         <i class="fa-solid fa-magnifying-glass fa-1x"></i>
                     </button>
                 </div>
-                <div ng-if="canOrder" class="search-bar">
+                <div ng-if="canOrder && !canCompare" class="search-bar">
                     <input
                         class="search"
                         type="text"
@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="container">
-                <div ng-if="!canOrder" class="filter">
+                <div ng-if="!canOrder && !canCompare" class="filter">
                     <label>篩選</label>
                     <div>
                         <button
@@ -55,7 +55,7 @@
                         </button>
                     </div>
                 </div>
-                <div ng-if="!canOrder" class="order">
+                <div ng-if="!canOrder && !canCompare" class="order">
                     <label>排序</label>
                     <div>
                         <button
@@ -82,7 +82,7 @@
                     </div>
                 </div>
 
-                <div class="card-container">
+                <div ng-if="!canOrder && !canCompare" class="card-container">
                     <div
                         class="card"
                         ng-repeat="restaurant in restaurants"
@@ -94,7 +94,8 @@
                                 <img ng-src="{{ restaurant.hero_image }}" />
                                 <div>
                                     <div>
-                                        {{ restaurant.minimum_delivery_fee }}
+                                        {{ restaurant.minimum_delivery_fee |
+                                        number:0}}
                                     </div>
                                     <div>分鐘</div>
                                 </div>
@@ -127,7 +128,8 @@
                                 </div>
                                 <div>
                                     <span class="card-fee"
-                                        >$ {{ restaurant.minimum_delivery_fee }} </span
+                                        >$ {{ restaurant.minimum_delivery_fee |
+                                        number:0}} </span
                                     >外送服務費
                                 </div>
                             </div>
@@ -135,7 +137,7 @@
                     </div>
                 </div>
                 <!--  -->
-                <div ng-if="canOrder">
+                <div ng-if="canOrder && !canCompare">
                     <div class="restaurant-logo">
                         <img ng-src="{{ current_restaurant.logo }}" />
                     </div>
@@ -185,7 +187,7 @@
                                         <div>
                                             $ {{
                                             product.product_variations[0].price
-                                            }}
+                                            | number:0 }}
                                         </div>
                                     </div>
                                 </div>
@@ -218,7 +220,62 @@
                                     <div>{{ product.name }}</div>
                                     <div>
                                         $ {{ product.product_variations[0].price
-                                        }}
+                                        | number:0 }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- canCompare -->
+                <div ng-if="!canOrder && canCompare">
+                    <div
+                        ng-repeat="restaurant in compare_restaurants"
+                        key="restaurant.id"
+                    >
+                        <div class="restaurant-logo">
+                            <img ng-src="{{ restaurant.hero_image }}" />
+                        </div>
+                        <div class="restaurant-description">
+                            <div class="card-name">{{ restaurant.name }}</div>
+                            <div class="card-rating">
+                                <span
+                                    ><i
+                                        style="color: #ff9800"
+                                        class="fa-solid fa-star"
+                                    ></i
+                                    ><strong
+                                        >{{ restaurant.rating }}/5</strong
+                                    ></span
+                                >
+                            </div>
+                            <div class="card-cuisines">
+                                <span>$$$</span>
+                                <span> {{ restaurant.cuisines[0].name }}</span>
+                                <span> {{ restaurant.cuisines[1].name }}</span>
+                            </div>
+                        </div>
+                        <div class="restaurant-content">
+                            <div
+                                class="product"
+                                ng-repeat="product in restaurant.answer"
+                                key="product"
+                                ng-click="chooseProduct(product)"
+                            >
+                                <!-- <div class="product-img">
+                                <img ng-src="{{ product.logo_path }}" />
+                                <div
+                                    class="product-selected"
+                                    ng-if="product.selected"
+                                >
+                                    x{{ product.count }}
+                                </div>
+                            </div> -->
+                                <div class="product-content">
+                                    <div>{{ product }}</div>
+                                    <div>
+                                        $ {{ product.product_variations[0].price
+                                        | number:0 }}
                                     </div>
                                 </div>
                             </div>
@@ -229,12 +286,13 @@
         </main>
         <footer>
             <p>Copyright &copy; 2022 資訊二仁專題四組</p>
-            <div class="scrollTop" ng-click="scrollTop()">
+            <div id="scrollTop" ng-click="scrollTop()">
                 <i
                     style="font-size: 30px; color: #000"
                     class="fa-solid fa-angle-up"
                 ></i>
             </div>
         </footer>
+        <div id="compare" ng-click="compare()">比價</div>
     </body>
 </html>
