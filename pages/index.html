@@ -169,26 +169,21 @@
                     <div class="restaurant-content">
                         <div ng-if="meal.length > 0">
                             <div class="card-name">搜尋 '{{ meal }}'</div>
+
                             <div
-                                ng-repeat="categorie in sortedMeals"
-                                key="categorie.id"
+                                class="product"
+                                ng-repeat="product in sortedMeals"
+                                key="product.id"
+                                ng-click="chooseProduct(product)"
                             >
-                                <div
-                                    class="product"
-                                    ng-repeat="product in categorie.products"
-                                    key="product.id"
-                                    ng-click="chooseProduct(product)"
-                                >
-                                    <div class="product-img">
-                                        <img ng-src="{{ product.logo_path }}" />
-                                    </div>
-                                    <div class="product-content">
-                                        <div>{{ product.name }}</div>
-                                        <div>
-                                            $ {{
-                                            product.product_variations[0].price
-                                            | number:0 }}
-                                        </div>
+                                <div class="product-img">
+                                    <img ng-src="{{ product.logo_path }}" />
+                                </div>
+                                <div class="product-content">
+                                    <div>{{ product.name }}</div>
+                                    <div>
+                                        $ {{ product.product_variations[0].price
+                                        | number:0 }}
                                     </div>
                                 </div>
                             </div>
@@ -293,6 +288,6 @@
                 ></i>
             </div>
         </footer>
-        <div id="compare" ng-click="compare()">比價</div>
+        <div ng-if="!compared" id="compare" ng-click="compare()">比價</div>
     </body>
 </html>

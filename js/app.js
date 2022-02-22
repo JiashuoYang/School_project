@@ -21,6 +21,7 @@ app.controller("myCtrl", ($scope, $window, $http) => {
     $scope.amount = 0;
     $scope.canOrder = false;
     $scope.canCompare = false;
+    $scope.compared = false;
     $scope.sortedMeals = [];
     $scope.similar_restaurants = [];
     $scope.compare_restaurants = [];
@@ -149,15 +150,38 @@ app.controller("myCtrl", ($scope, $window, $http) => {
         $scope.meal = e.meal;
         if ($scope.meal.length > 0) {
             window.scrollTo({ top: 410, behavior: "smooth" });
-            let products = [];
-            products = products.concat(
-                ...$scope.categories.map((categorie) => categorie.products)
-            );
-            console.log(products);
-            $scope.sortedMeals = products.filter((product) =>
+            let all_products = [];
+            for (
+                let i = 0;
+                i < $scope.categories.length;
+                i++
+            ) {
+                for (
+                    let j = 0;
+                    j <
+                    $scope.categories[i].products
+                        .length;
+                    j++
+                ) {
+                    // console.log(res.data.menus[0].menu_categories[i]
+                    //     .products);
+                    all_products.push(
+                        $scope.categories[i].products[
+                            j
+                        ]
+                    );
+                }
+            }
+            console.log(all_products);
+            // let products = [];
+            // products = products.concat(
+            //     ...$scope.categories.map((categorie) => categorie.products)
+            // );
+            // console.log(products);
+            $scope.sortedMeals = all_products.filter((product) =>
                 product.name.includes($scope.meal)
             );
-            console.log($scope.sortedMeals);
+            console.log($scope.sortedMeals[0]?.name);
 
             console.log($scope.meal);
         } else {
@@ -181,16 +205,16 @@ app.controller("myCtrl", ($scope, $window, $http) => {
             JSON.stringify($scope.products_selected)
         );
         // $scope.similar_restaurants.map((restaurant) => restaurant.code);
-        console.log(
-            `${$scope.api}/search_box?code=${$scope.similar_restaurants[0].code}&box=${queryString}`
-        );
+        // console.log(
+        //     `${$scope.api}/search_box?code=${$scope.similar_restaurants[0].code}&box=${queryString}`
+        // );
         for (let i = 0; i < $scope.similar_restaurants.length; i++) {
             $http
                 .get(
                     `${$scope.api}/search_box?code=${$scope.similar_restaurants[i].code}&box=${queryString}`
                 )
                 .then((res) => {
-                    console.log($scope.similar_restaurants[i]);
+                    // console.log($scope.similar_restaurants[i]);
 
                     // for (
                     //     let k = 0;
@@ -221,6 +245,57 @@ app.controller("myCtrl", ($scope, $window, $http) => {
                             answer.push(res.data.answer[j]);
                         }
                     }
+                    // $http
+                    //     .get(
+                    //         `${$scope.api}/restaurant?code=${$scope.similar_restaurants[i].code}`
+                    //     )
+                    //     .then((res) => {
+                    //         // console.log(res.data.menus[0].menu_categories);
+                    //         let all_products = [];
+                    //         for (
+                    //             let i = 0;
+                    //             i < res.data.menus[0].menu_categories.length;
+                    //             i++
+                    //         ) {
+                    //             for (
+                    //                 let j = 0;
+                    //                 j <
+                    //                 res.data.menus[0].menu_categories[i]
+                    //                     .products.length;
+                    //                 j++
+                    //             ) {
+                    //                 // console.log(res.data.menus[0].menu_categories[i]
+                    //                 //     .products);
+                    //                 all_products.push(
+                    //                     res.data.menus[0].menu_categories[i]
+                    //                         .products[j]
+                    //                 );
+                    //             }
+                    //         }
+
+                    //         // console.log(
+                    //         //     ($scope.compare_restaurant_products =
+                    //         //         res.data.menus[0].menu_categorie.filter(
+                    //         //             (categorie) =>
+                    //         //                 categorie.products
+                    //         //                     .map((product) => product.name)
+                    //         //                     .includes(...answer)
+                    //         //         ))
+                    //         // );
+                    //         let products = []
+                    //         console.log(answer);
+                    //         console.log(all_products.map((product) => product.name));
+                    //         for (let i=0; i<answer.length; i++) {
+                    //             for (let j=0; j<all_products.length; j++) {
+                    //                 if (answer[i] === all_products[j].name) {
+                    //                     products.push(all_products[j]);
+                    //                 }
+                    //             }
+                    //         }
+                    //         console.log(products);
+                    //         $scope.compare_restaurant_products = products;
+                    //     });
+
                     $scope.compare_restaurants.push({
                         ...$scope.similar_restaurants[i],
                         answer: answer,
@@ -242,6 +317,7 @@ app.controller("myCtrl", ($scope, $window, $http) => {
     $scope.compare = () => {
         $scope.canOrder = false;
         $scope.canCompare = true;
+        $scope.compared = true;
         window.scrollTo({ top: 0, behavior: "smooth" });
         document.querySelector("#compare").style.display = "none";
         console.log("比價");
