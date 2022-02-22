@@ -12,7 +12,6 @@ app.controller("myCtrl", ($scope, $window, $http) => {
         code: "",
         labels: [],
     };
-
     $scope.codes = [];
     $scope.random_codes = [];
     $scope.categories = [];
@@ -106,11 +105,6 @@ app.controller("myCtrl", ($scope, $window, $http) => {
                     code: restaurant.code,
                 };
                 $scope.categories = res.data.menus[0].menu_categories;
-                // console.log(
-                //     ...$scope.current_restaurant.cuisines.map(
-                //         (cuisine) => cuisine.name
-                //     )
-                // );
                 $scope.similar_restaurants = $scope.restaurants.filter(
                     (restaurant) =>
                         restaurant.cuisines
@@ -121,16 +115,6 @@ app.controller("myCtrl", ($scope, $window, $http) => {
                                 )
                             )
                 );
-                // console.log(
-                //     $scope.similar_restaurants.map((restaurant) =>
-                //         restaurant.cuisines.map((cuisine) => cuisine.name)
-                //     )
-                // );
-                // console.log(
-                //     $scope.similar_restaurants.map(
-                //         (restaurant) => restaurant.code
-                //     )
-                // );
                 $scope.amount = restaurant.minimum_delivery_fee;
                 $scope.canOrder = true;
                 for (let i = 0; i < $scope.categories.length; i++) {
@@ -151,41 +135,16 @@ app.controller("myCtrl", ($scope, $window, $http) => {
         if ($scope.meal.length > 0) {
             window.scrollTo({ top: 410, behavior: "smooth" });
             let all_products = [];
-            for (
-                let i = 0;
-                i < $scope.categories.length;
-                i++
-            ) {
-                for (
-                    let j = 0;
-                    j <
-                    $scope.categories[i].products
-                        .length;
-                    j++
-                ) {
-                    // console.log(res.data.menus[0].menu_categories[i]
-                    //     .products);
-                    all_products.push(
-                        $scope.categories[i].products[
-                            j
-                        ]
-                    );
+            for (let i = 0; i < $scope.categories.length; i++) {
+                for (let j = 0; j < $scope.categories[i].products.length; j++) {
+                    all_products.push($scope.categories[i].products[j]);
                 }
             }
             console.log(all_products);
-            // let products = [];
-            // products = products.concat(
-            //     ...$scope.categories.map((categorie) => categorie.products)
-            // );
-            // console.log(products);
+
             $scope.sortedMeals = all_products.filter((product) =>
                 product.name.includes($scope.meal)
             );
-            console.log($scope.sortedMeals[0]?.name);
-
-            console.log($scope.meal);
-        } else {
-            console.log("nothing");
         }
     };
     $scope.chooseProduct = (product) => {
@@ -193,114 +152,73 @@ app.controller("myCtrl", ($scope, $window, $http) => {
         $scope.products_selected.push(product.name);
         $scope.amount += product.product_variations[0].price;
         console.log(
-            `餐點：${product.name}，價格：${product.product_variations[0].price}`
+            `餐廳：${$scope.current_restaurant.name}，餐點：${product.name}，價格：${product.product_variations[0].price}`
         );
         console.log(`合計：${$scope.amount}(含外送服務費)`);
         product.selected = true;
         product.count++;
-        // console.log($scope.products_selected);
-        // console.log($scope.restaurants.map((restaurant) => restaurant.cuisines.map((cuisine) => cuisine.name)));
-        // $scope.current_restaurant.cuisines
-        let queryString = encodeURIComponent(
-            JSON.stringify($scope.products_selected)
-        );
-        // $scope.similar_restaurants.map((restaurant) => restaurant.code);
-        // console.log(
-        //     `${$scope.api}/search_box?code=${$scope.similar_restaurants[0].code}&box=${queryString}`
+        // let queryString = encodeURIComponent(
+        //     JSON.stringify(...$scope.products_selected)
         // );
+        let queryString = $scope.products_selected;
+
         for (let i = 0; i < $scope.similar_restaurants.length; i++) {
             $http
                 .get(
                     `${$scope.api}/search_box?code=${$scope.similar_restaurants[i].code}&box=${queryString}`
                 )
                 .then((res) => {
-                    // console.log($scope.similar_restaurants[i]);
-
-                    // for (
-                    //     let k = 0;
-                    //     k < $scope.similar_restaurants.length;
-                    //     k++
-                    // ) {
-                    //     $http
-                    //         .get(
-                    //             `${$scope.api}/restaurant?code=${$scope.similar_restaurants[k].code}`
-                    //         )
-                    //         .then((res) => {
-                    //             res.data.menus[0].menu_categories =
-                    //                 res.data.menus[0].menu_categories.filter(
-                    //                     (categorie) =>
-                    //                         categorie.products
-                    //                             .map((product) => product.name)
-                    //                             .includes(...answer)
-                    //                 );
-                    //             $scope.compare_restaurant_products =
-                    //                 res.data.menus[0].menu_categories.map(
-                    //                     (categorie) => categorie.products
-                    //                 );
-                    //         });
+                    console.log(
+                        `${$scope.api}/search_box?code=${$scope.similar_restaurants[i].code}&box=${queryString}`
+                    );
+                    // let answer = [];
+                    // console.log(res.data.answer);
+                    // for (let j = 0; j < res.data.answer.length; j++) {
+                    //     if (res.data.answer[j] !== "") {
+                    //         answer.push(res.data.answer[j]);
+                    //     }
                     // }
-                    let answer = [];
-                    for (let j = 0; j < res.data.answer.length; j++) {
-                        if (res.data.answer[j] !== "") {
-                            answer.push(res.data.answer[j]);
+                    console.log(res.data.answer);
+                    let pass = false;
+                    for (let k = 0; k < res.data.answer.length; k++) {
+                        for (let j = 0; j < res.data.answer[k].length; j++) {
+                            if (
+                                res.data.answer[k][j].length > 0 &&
+                                res.data.answer.length ===
+                                    $scope.products_selected.length
+                            ) {
+                                pass = true;
+                            }
                         }
                     }
-                    // $http
-                    //     .get(
-                    //         `${$scope.api}/restaurant?code=${$scope.similar_restaurants[i].code}`
-                    //     )
-                    //     .then((res) => {
-                    //         // console.log(res.data.menus[0].menu_categories);
-                    //         let all_products = [];
-                    //         for (
-                    //             let i = 0;
-                    //             i < res.data.menus[0].menu_categories.length;
-                    //             i++
-                    //         ) {
-                    //             for (
-                    //                 let j = 0;
-                    //                 j <
-                    //                 res.data.menus[0].menu_categories[i]
-                    //                     .products.length;
-                    //                 j++
-                    //             ) {
-                    //                 // console.log(res.data.menus[0].menu_categories[i]
-                    //                 //     .products);
-                    //                 all_products.push(
-                    //                     res.data.menus[0].menu_categories[i]
-                    //                         .products[j]
-                    //                 );
-                    //             }
-                    //         }
+                    if (pass) {
+                        $scope.compare_restaurants.push({
+                            ...$scope.similar_restaurants[i],
+                            answer: res.data.answer,
+                        });
+                    }
 
-                    //         // console.log(
-                    //         //     ($scope.compare_restaurant_products =
-                    //         //         res.data.menus[0].menu_categorie.filter(
-                    //         //             (categorie) =>
-                    //         //                 categorie.products
-                    //         //                     .map((product) => product.name)
-                    //         //                     .includes(...answer)
-                    //         //         ))
-                    //         // );
-                    //         let products = []
-                    //         console.log(answer);
-                    //         console.log(all_products.map((product) => product.name));
-                    //         for (let i=0; i<answer.length; i++) {
-                    //             for (let j=0; j<all_products.length; j++) {
-                    //                 if (answer[i] === all_products[j].name) {
-                    //                     products.push(all_products[j]);
-                    //                 }
-                    //             }
-                    //         }
-                    //         console.log(products);
-                    //         $scope.compare_restaurant_products = products;
+                    // if (res.data.answer[0].length > 0) {
+                    //     $scope.compare_restaurants.push({
+                    //         ...$scope.similar_restaurants[i],
+                    //         answer: res.data.answer,
                     //     });
 
-                    $scope.compare_restaurants.push({
-                        ...$scope.similar_restaurants[i],
-                        answer: answer,
-                    });
-                    console.log(answer);
+                    // }
+                    // console.log(res.data.answer.length);
+                    // console.log($scope.products_selected.length);
+                    // if (
+                    //     res.data.answer.length ===
+                    //     $scope.products_selected.length
+                    // ) {
+                    //     $scope.compare_restaurants.push({
+                    //         ...$scope.similar_restaurants[i],
+                    //         answer: res.data.answer,
+                    //     });
+                    // }
+                    console.log(
+                        $scope.compare_restaurants.map((res) => res.answer)
+                    );
                 });
         }
     };
@@ -320,7 +238,5 @@ app.controller("myCtrl", ($scope, $window, $http) => {
         $scope.compared = true;
         window.scrollTo({ top: 0, behavior: "smooth" });
         document.querySelector("#compare").style.display = "none";
-        console.log("比價");
-        console.log($scope.compare_restaurants);
     };
 });

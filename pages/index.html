@@ -226,7 +226,8 @@
                 <div ng-if="!canOrder && canCompare">
                     <div
                         ng-repeat="restaurant in compare_restaurants"
-                        key="restaurant.id"
+                        key="restaurant.code"
+                        ng-if="restaurant.answer.length > 0"
                     >
                         <div class="restaurant-logo">
                             <img ng-src="{{ restaurant.hero_image }}" />
@@ -251,29 +252,27 @@
                             </div>
                         </div>
                         <div class="restaurant-content">
-                            <div
+                            <a
                                 class="product"
-                                ng-repeat="product in restaurant.answer"
-                                key="product"
-                                ng-click="chooseProduct(product)"
+                                ng-repeat="products in restaurant.answer"
+                                key="$index"
+                                ng-href="{{restaurant.web_path}}"
                             >
-                                <!-- <div class="product-img">
-                                <img ng-src="{{ product.logo_path }}" />
-                                <div
-                                    class="product-selected"
-                                    ng-if="product.selected"
-                                >
-                                    x{{ product.count }}
-                                </div>
-                            </div> -->
                                 <div class="product-content">
-                                    <div>{{ product }}</div>
-                                    <div>
-                                        $ {{ product.product_variations[0].price
-                                        | number:0 }}
+                                    <div
+                                        ng-repeat="product in products"
+                                        key="$index"
+                                    >
+                                        <div>
+                                            <span>{{ product[0] }}</span>
+                                            <span
+                                                > $ {{ product[1] | number:0
+                                                }}</span
+                                            >
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -288,6 +287,8 @@
                 ></i>
             </div>
         </footer>
-        <div ng-if="!compared" id="compare" ng-click="compare()">比價</div>
+        <div ng-if="!compared" id="compare" ng-click="compare()">
+            這裡還有其他選擇！
+        </div>
     </body>
 </html>
