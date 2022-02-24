@@ -1,6 +1,6 @@
 const app = angular.module("myApp", []);
 app.controller("myCtrl", ($scope, $window, $http) => {
-    $scope.hostname = "http://cs102.nihs.tp.edu.tw/School_project";
+    $scope.hostname = "http://localhost/web/School_project";
     $scope.api = "http://cs102.nihs.tp.edu.tw:5000";
     $scope.Restaurants = [];
     $scope.restaurants = [];
@@ -68,7 +68,6 @@ app.controller("myCtrl", ($scope, $window, $http) => {
     };
     $scope.handleSearch = () => {
         $scope.meal = "";
-        window.scrollTo({ top: 0, behavior: "instant" });
         $http
             .get(`${$scope.api}/search?key=${$scope.meal}`)
             .then((res) => {
@@ -124,6 +123,7 @@ app.controller("myCtrl", ($scope, $window, $http) => {
                         j++
                     ) {
                         $scope.categories[i].products[j].selected = false;
+                        $scope.categories[i].products[j].count = 0;
                     }
                 }
                 window.scrollTo({ top: 210, behavior: "instant" });
@@ -146,22 +146,42 @@ app.controller("myCtrl", ($scope, $window, $http) => {
     };
     $scope.chooseProduct = (product) => {
         document.querySelector("#compare").style.display = "block";
+        $scope.products_selected.push(product.name);
         $scope.amount += product.product_variations[0].price;
         console.log(
             `餐廳：${$scope.current_restaurant.name}，餐點：${product.name}，價格：${product.product_variations[0].price}`
         );
         console.log(`合計：${$scope.amount}(含外送服務費)`);
-        product.selected = !product.selected;
-        if (product.selected) {
-            $scope.products_selected.push(product.name);
-            console.log($scope.products_selected);
-        } else {
-            $scope.products_selected = $scope.products_selected.filter(
-                function (value) {
-                    return value != product.name;
-                }
-            );
-            console.log($scope.products_selected);
+        product.selected = true;
+        product.count++;
+        // let queryString = encodeURIComponent(
+        //     JSON.stringify(...$scope.products_selected)
+        // );
+        let queryString = $scope.products_selected;
+
+        for (let i = 0; i < $scope.similar_restaurants.length; i++) {
+            $http
+                .get(
+                    `${$scope.api}/search_box?code=${$scope.similar_restaurants[i].code}&box=${queryString}`
+                )
+                .then((res) => {
+                    let count = 0;
+                    console.log(res.data.answer);
+                    for (let j = 0; j < res.data.answer.length; j++) {
+                        if (res.data.answer[j].length > 0) {
+                            count++;
+                        }
+                    }
+                    console.log("count", count);
+                    console.log("len", res.data.answer.length);
+
+                    if (count === $scope.products_selected.length) {
+                        $scope.compare_restaurants.push({
+                            ...$scope.similar_restaurants[i],
+                            answer: res.data.answer,
+                        });
+                    }
+                });
         }
     };
     window.onscroll = () => {
@@ -180,64 +200,5 @@ app.controller("myCtrl", ($scope, $window, $http) => {
         $scope.compared = true;
         window.scrollTo({ top: 0, behavior: "smooth" });
         document.querySelector("#compare").style.display = "none";
-        let queryString = $scope.products_selected;
-
-        for (let i = 0; i < $scope.similar_restaurants.length; i++) {
-            $http
-                .get(
-                    `${$scope.api}/search_box?code=${$scope.similar_restaurants[i].code}&box=${queryString}`
-                )
-                .then((res) => {
-                    let count = 0;
-                    for (let j = 0; j < res.data.answer.length; j++) {
-                        if (res.data.answer[j].length > 0) {
-                            count++;
-                        }
-                    }
-                    let amount = 0;
-                    if (count === $scope.products_selected.length) {
-                        $scope.compare_restaurants.push(
-                            $scope.similar_restaurants[i]
-                        );
-                        $scope.compare_restaurants[
-                            $scope.compare_restaurants.length - 1
-                        ]["answer"] = res.data.answer;
-                        for (let j = 0; j < res.data.answer.length; j++) {
-                            amount += res.data.answer[j][0][1];
-                            console.log(amount);
-                        }
-                        $scope.compare_restaurants[
-                            $scope.compare_restaurants.length - 1
-                        ]["fee"] =
-                            $scope.compare_restaurants[
-                                $scope.compare_restaurants.length - 1
-                            ].minimum_delivery_fee;
-                        $scope.compare_restaurants[
-                            $scope.compare_restaurants.length - 1
-                        ]["amount"] =
-                            amount +
-                            $scope.compare_restaurants[
-                                $scope.compare_restaurants.length - 1
-                            ]["fee"];
-
-                        console.log(
-                            $scope.compare_restaurants[
-                                $scope.compare_restaurants.length - 1
-                            ]
-                        );
-                        console.log($scope.compare_restaurants);
-                    }
-                });
-        }
-    };
-    $scope.compareAmount = (order) => {
-        switch (order) {
-            case "lowToHigh":
-                $scope.compare_restaurants.sort((a, b) => a.amount - b.amount);
-                break;
-            case "highToLow":
-                $scope.compare_restaurants.sort((a, b) => b.amount - a.amount);
-                break;
-        }
     };
 });

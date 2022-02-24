@@ -136,7 +136,6 @@
                         </div>
                     </div>
                 </div>
-                <!--  -->
                 <div ng-if="canOrder && !canCompare">
                     <div class="restaurant-logo">
                         <img ng-src="{{ current_restaurant.logo }}" />
@@ -188,7 +187,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--  -->
                         <div
                             ng-repeat="categorie in categories"
                             key="categorie.id"
@@ -208,7 +206,7 @@
                                         class="product-selected"
                                         ng-if="product.selected"
                                     >
-                                        x{{ product.count }}
+                                        ✓
                                     </div>
                                 </div>
                                 <div class="product-content">
@@ -222,7 +220,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- canCompare -->
                 <div ng-if="!canOrder && canCompare">
                     <div
                         ng-repeat="restaurant in compare_restaurants"
@@ -252,27 +249,31 @@
                             </div>
                         </div>
                         <div class="restaurant-content">
-                            <a
-                                class="product"
+                            <div
                                 ng-repeat="products in restaurant.answer"
                                 key="$index"
-                                ng-href="{{restaurant.web_path}}"
                             >
-                                <div class="product-content">
-                                    <div
-                                        ng-repeat="product in products"
-                                        key="$index"
-                                    >
-                                        <div>
-                                            <span>{{ product[0] }}</span>
-                                            <span
-                                                > $ {{ product[1] | number:0
-                                                }}</span
-                                            >
-                                        </div>
+                                <div>
+                                    <div>
+                                        <span>{{ products[0][0] }}</span>
+                                        <span>
+                                            $ {{ products[0][1] | number:0
+                                            }}</span
+                                        >
                                     </div>
                                 </div>
-                            </a>
+                            </div>
+                            <div>
+                                外送服務費：$ {{ restaurant.fee | number: 0 }}
+                            </div>
+                            <div>
+                                合計：$ {{ restaurant.amount | number:0 }}
+                            </div>
+                            <a ng-href="{{ restaurant.web_path }}"
+                                >點擊這裡點餐<i
+                                    class="fa-thin fa-arrow-left-long"
+                                ></i
+                            ></a>
                         </div>
                     </div>
                 </div>
@@ -280,15 +281,19 @@
         </main>
         <footer>
             <p>Copyright &copy; 2022 資訊二仁專題四組</p>
-            <div id="scrollTop" ng-click="scrollTop()">
+            <div class="scrollTop" ng-click="scrollTop()">
                 <i
                     style="font-size: 30px; color: #000"
                     class="fa-solid fa-angle-up"
                 ></i>
             </div>
         </footer>
-        <div ng-if="!compared" id="compare" ng-click="compare()">
+        <div ng-if="!compared" class="compare" ng-click="compare()">
             這裡還有其他選擇！
+        </div>
+        <div ng-if="compared" class="compareAmount">
+            <div ng-click="compareAmount('lowToHigh')">價格低至高</div>
+            <div ng-click="compareAmount('highToLow')">價格高至低</div>
         </div>
     </body>
 </html>
