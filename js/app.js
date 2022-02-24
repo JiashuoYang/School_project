@@ -24,7 +24,6 @@ app.controller("myCtrl", ($scope, $window, $http) => {
     $scope.sortedMeals = [];
     $scope.similar_restaurants = [];
     $scope.compare_restaurants = [];
-    $scope.compare_restaurant_products = [];
     $http
         .get(`${$scope.hostname}/data/restaurants.json`)
         .then((res) => {
