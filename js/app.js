@@ -4,7 +4,7 @@ app.controller("myCtrl", [
     "$window",
     "$http",
     ($, $window, $http) => {
-        $.hostname = "http://cs102.nihs.tp.edu.tw/School_project";
+        $.hostname = "http://localhost/web/School_project";
         $.api = "http://cs102.nihs.tp.edu.tw:5000";
         $.Restaurants = [];
         $.restaurants = [];
@@ -147,15 +147,19 @@ app.controller("myCtrl", [
             }
         };
         $.chooseProduct = (product) => {
-            document.querySelector(".compare").style.display = "block";
             $.amount += product.product_variations[0].price;
             product.selected = !product.selected;
             if (product.selected) {
                 $.products_selected.push(product.name);
             } else {
-                $.products_selected = $.products_selected.filter((value) => {
-                    value != product.name;
-                });
+                $.products_selected = $.products_selected.filter(
+                    (value) => value !== product.name
+                );
+            }
+            if ($.products_selected.length > 0) {
+                document.querySelector(".compare").style.display = "block";
+            } else {
+                document.querySelector(".compare").style.display = "none";
             }
         };
         $window.onscroll = () => {
