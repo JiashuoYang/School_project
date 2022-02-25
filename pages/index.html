@@ -4,17 +4,18 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>想吃、點什麼嗎？</title>
+        <title>想吃，點什麼嗎？</title>
+        <link rel="icon" href="../img/favicon.png" />
         <link rel="stylesheet" href="../css/style.css" />
         <link rel="stylesheet" href="../fonts/css/all.min.css" />
         <script src="../js/jquery.min.js"></script>
         <script src="../js/ng.js"></script>
         <script src="../js/app.js"></script>
     </head>
-    <body ng-app="myApp" ng-controller="myCtrl">
+    <body ng-app="myApp" ng-controller="myCtrl" ng-init="init()">
         <header>
-            <a href="http://localhost/web/School_project/pages/index.html"
-                >想吃、點什麼嗎？</a
+            <a href="http://cs102.nihs.tp.edu.tw/School_project/pages/index.html"
+                >想吃，點什麼嗎？</a
             >
         </header>
         <main>
@@ -270,17 +271,15 @@
                                 合計：$ {{ restaurant.amount | number:0 }}
                             </div>
                             <a ng-href="{{ restaurant.web_path }}"
-                                >點擊這裡點餐<i
-                                    class="fa-thin fa-arrow-left-long"
-                                ></i
-                            ></a>
+                                >點擊這裡點餐
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </main>
         <footer>
-            <p>Copyright &copy; 2022 資訊二仁專題四組</p>
+            <p>Copyright &copy; 2022 想吃，點什麼嗎？</p>
             <div class="scrollTop" ng-click="scrollTop()">
                 <i
                     style="font-size: 30px; color: #000"

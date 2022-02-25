@@ -105,6 +105,15 @@ header a {
     margin: 5px;
     padding: 10px;
     background-color: #fff;
+    -webkit-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -ms-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+}
+.filter-btn:hover,
+.filter-btn:focus {
+    background-color: #f5f6f7;
 }
 .order > label {
     font-size: 30px;
@@ -125,6 +134,15 @@ header a {
     cursor: pointer;
     padding: 10px 24px;
     background-color: #ffc947;
+    -webkit-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    -ms-transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+    transition: background-color 0.1s cubic-bezier(0.42, 0, 0.58, 1);
+}
+.order-btn:hover,
+.order-btn:focus {
+    background-color: #ffb547;
 }
 .order-btn:last-child {
     border-right: 1px solid #000;
@@ -287,7 +305,7 @@ header a {
 footer {
     height: 100px;
     line-height: 100px;
-    background-color: #333;
+    background-color: #20232a;
 }
 footer p {
     color: #fff;
@@ -307,14 +325,6 @@ footer p {
     border-radius: 50%;
     box-shadow: 0px 0px 3px #000;
     background-color: #f44336;
-    -webkit-transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
-    -moz-transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
-    -o-transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
-    -ms-transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
-    transition: transform 0.3s cubic-bezier(0.42, 0, 0.58, 1);
-}
-.scrollTop:hover {
-    transform: scale(0.8, 0.8);
 }
 .compare {
     position: fixed;
